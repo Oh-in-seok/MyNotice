@@ -1,0 +1,76 @@
+﻿@{
+    int Idx, CurrentPage;
+    Idx = Convert.ToInt32(Context.Request.Query["idx"]);
+    CurrentPage = Convert.ToInt32(Context.Request.Query["currentPage"]);
+
+    string SearchCondition, SearchKeyword;
+    SearchCondition = Context.Request.Query["searchCondition"].ToString();
+    SearchKeyword = Context.Request.Query["searchKeyword"].ToString();
+}
+<div class="col-md-12">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h5 class="card-title">공지사항 보기</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <div class="fw-bold border-bottom">@ViewBag.NoticeData.Rows[0]["BTitle"].ToString()</div>
+                <span class="text-secondary">@ViewBag.NoticeData.Rows[0]["BRegDate"].ToString() ( <span class="fst-italic">hit : @ViewBag.NoticeData.Rows[0]["BHitCount"].ToString()</span> )</span>
+            </div>
+            <div class="mb-3">
+                <div class="border-bottom pb-3">
+                    @ViewBag.NoticeData.Rows[0]["BUserName"].ToString()
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="border-bottom pb-3">
+                    @Html.Raw(ViewBag.NoticeData.Rows[0]["BContent"].ToString().Replace("\r\n", "<br />"))
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-6 col-6">
+                    <div class="d-flex gap-2">
+                        <input type="button" value="수정" class="btn btn-success" id="btnModify" />
+                        <input type="button" value="삭제" class="btn btn-danger" id="btnDelete" />
+                    </div>
+                </div>
+                <div class="col-md-6 col-6">
+                    <div class="d-flex justify-content-end">
+                        <input type="button" value="목록" class="btn btn-primary" id="btnList" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //수정
+        $("#btnModify").click(function (e) {
+            e.preventDefault();
+
+            location.href = "/Notice/Edit?idx=@Idx&currentPage=@CurrentPage&searchCondition=@SearchCondition&searchKeyword=@SearchKeyword";
+        });
+
+        //삭제
+        $("#btnDelete").click(function (e) {
+            e.preventDefault();
+
+            if (confirm("해당 글을 삭제하시겠습니까?")) {
+                location.href = "/Notice/DeleteOk?idx=@Idx&currentPage=@CurrentPage&searchCondition=@SearchCondition&searchKeyword=@SearchKeyword";
+            }
+        });
+
+        //목록
+        $("#btnList").click(function (e) {
+            e.preventDefault();
+
+            location.href = "/Notice/Index?currentPage=@CurrentPage&searchCondition=@SearchCondition&searchKeyword=@SearchKeyword";
+        });
+    });
+</script>

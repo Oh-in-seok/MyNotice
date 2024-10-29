@@ -1,0 +1,42 @@
+﻿<table class="mb-0 table">
+    <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">제목</th>
+            <th class="text-center">등록자</th>
+            <th class="text-center">등록일</th>
+            <th class="text-center">조회</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.DataList != null)
+		{
+			foreach (var item in ViewBag.DataList.Rows)
+			{
+                <tr>
+                    <td scope="row" class="text-center">
+                        @item["Idx"].ToString()
+                    </td>
+                    <td class="text-start">
+                        @item["BTitle"].ToString()
+                    </td>
+                    <td class="text-center">
+                        @item["BUserName"].ToString()
+                    </td>
+                    <td class="text-center">
+                        @Convert.ToDateTime(item["BRegDate"].ToString())
+                    </td>
+                    <td class="text-center">
+                        @Convert.ToInt32(item["BHitCount"].ToString())
+                    </td>
+                </tr>
+			}
+		}
+		else
+		{
+            <tr>
+                <td scope="row" colspan="5" class="text-center">등록된 데이터가 없습니다.</td>
+            </tr>
+        }
+    </tbody>
+</table>

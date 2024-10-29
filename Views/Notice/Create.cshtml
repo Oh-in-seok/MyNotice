@@ -1,0 +1,99 @@
+﻿
+<div class="col-md-12">
+    <div class="card card-primary card-outline">
+        <form name="frmForm" id="frmForm" method="post" asp-controller="Notice" asp-action="Create">
+            <div class="card-header">
+                <h5 class="card-title">공지사항 등록</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="mb-1" for="BTitle">제목</label>
+                    <input class="form-control" name="BTitle" id="BTitle" type="text" placeholder="제목을 입력해 주세요." />
+                    <div class="errMsg"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1" for="BUserName">등록자</label>
+                    <input class="form-control" name="BUserName" id="BUserName" type="text" placeholder="등록자를 입력해 주세요." />
+                    <div class="errMsg"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1" for="BContent">내용</label>
+                    <textarea class="form-control" name="BContent" id="BContent" placeholder="내용을 입력해 주세요." rows="10"></textarea>
+                    <div class="errMsg"></div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-6 col-6">
+                        <div class="d-flex gap-2">
+                            <input type="submit" value="확인" class="btn btn-success" id="btnConfirm" />
+                            <input type="button" value="취소" class="btn btn-danger" id="btnCancel" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-6">
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="목록" class="btn btn-primary" id="btnList" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnList, #btnCancel").click(function (e) {
+            e.preventDefault();
+
+            location.href = "/Notice/Index";
+        });
+
+        // 공백 체크 규칙을 추가합니다.
+        $.validator.addMethod("whitespace", function (value, element) {
+            return this.optional(element) || $.trim(value) !== "";
+        }, "공백은 허용되지 않습니다.");
+
+        //폼 체크
+        $("#frmForm").validate({
+            errorClass: "is-invalid",
+            validClass: 'is-valid',
+            debug: false,
+            rules: {
+                BTitle: {
+                    required: true,
+                    whitespace: true
+                },
+                BUserName: {
+                    required: true,
+                    whitespace: true
+                },
+                BContent: {
+                    required: true,
+                    whitespace: true
+                }
+            },
+            messages: {
+                BTitle: {
+                    required: "제목을 입력해 주세요."
+                },
+                BUserName: {
+                    required: "등록자를 입력해 주세요."
+                },
+                BContent: {
+                    required: "내용을 입력해 주세요."
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("invalid-feedback");
+                error.appendTo(element.closest("div").find(".errMsg"))
+            },
+            submitHandler: function (form) {
+                if (confirm("등록하시겠습니까?")) {
+                    form.submit();
+                }
+            }
+        });
+    });
+</script>
